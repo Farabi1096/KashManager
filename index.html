@@ -5,103 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Finance Tracker</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <script type="importmap">
-    {
-        "imports": {
-            "react": "https://esm.sh/react@18.2.0",
-            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-            "lucide-react": "https://esm.sh/lucide-react@0.344.0"
-        }
-    }
-    </script>
-
+    <!-- Babel for JSX transformation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* Custom scrollbar and animations from your code */
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
         .custom-scrollbar::-webkit-scrollbar { width: 0px; background: transparent; }
-        :root { --ease-ios: cubic-bezier(0.16, 1, 0.3, 1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Smooth scrolling for iOS */
+        .scroll-smooth { -webkit-overflow-scrolling: touch; }
+
+        /* Animations */
         @keyframes pageEnter { from { opacity: 0; transform: scale(0.99) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes staggerIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         @keyframes bounceIn { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
         .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
-        .animate-page-enter { animation: pageEnter 0.4s var(--ease-ios) forwards; }
-        .animate-slide-up-fade { animation: slideUpFade 0.5s var(--ease-ios) backwards; }
-        .animate-stagger-in { animation: staggerIn 0.3s var(--ease-ios) forwards; }
-        .animate-scale-in { animation: scaleIn 0.4s var(--ease-ios) backwards; }
+        .animate-page-enter { animation: pageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-slide-up-fade { animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+        .animate-stagger-in { animation: staggerIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-scale-in { animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
         .animate-bounce-in { animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white h-screen overflow-hidden">
-    
-    <div id="root"></div>
+<body class="bg-gray-100 h-screen w-full flex justify-center items-center overflow-hidden">
+
+    <div id="root" class="w-full h-full max-w-md mx-auto relative shadow-2xl bg-gray-50"></div>
 
     <script type="text/babel" data-type="module">
-        import { createRoot } from 'react-dom/client';
-        
-        // --- YOUR CODE STARTS HERE ---
-        import React, { useState, useEffect, useMemo, useCallback } from 'react';
+        import React, { useState, useEffect, useMemo, useCallback } from 'https://esm.sh/react@18.2.0';
+        import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
         import { 
-          Wallet, 
-          PieChart, 
-          Home, 
-          Settings, 
-          Plus, 
-          ArrowUpRight, 
-          ArrowDownLeft, 
-          ShoppingBag, 
-          Coffee, 
-          Car, 
-          Zap, 
-          Gamepad2, 
-          Search,
-          Bell,
-          MoreHorizontal,
-          ChevronLeft,
-          ChevronRight,
-          Moon,
-          Sun,
-          X,
-          Check,
-          CreditCard,
-          Banknote,
-          Image as ImageIcon,
-          FileText,
-          PiggyBank,
-          ArrowRightLeft,
-          HandCoins,
-          Target,
-          Sparkles,
-          TrendingDown,
-          TrendingUp,
-          AlertCircle,
-          Loader2,
-          User,
-          Calendar,
-          Trophy,
-          Repeat,
-          Plane,
-          Smartphone,
-          Gift,
-          Trash2,
-          Landmark,
-          BellRing,
-          Clock,
-          Info,
-          Briefcase,
-          Building,
-          MapPin,
-          Mail,
-          Phone,
-          ChevronDown,
-          PlusCircle,
-          Edit2
-        } from 'lucide-react';
+            Wallet, PieChart, Home, Settings, Plus, ArrowUpRight, ArrowDownLeft, 
+            ShoppingBag, Coffee, Car, Zap, Gamepad2, Search, Bell, MoreHorizontal, 
+            ChevronLeft, ChevronRight, Moon, Sun, X, Check, CreditCard, Banknote, 
+            Image as ImageIcon, FileText, PiggyBank, ArrowRightLeft, HandCoins, 
+            Target, Sparkles, TrendingDown, TrendingUp, AlertCircle, Loader2, 
+            User, Calendar, Trophy, Repeat, Plane, Smartphone, Gift, Trash2, 
+            Landmark, BellRing, Clock, Info, Briefcase, Building, MapPin, Mail, 
+            Phone, ChevronDown, PlusCircle, Edit2, Heart
+        } from 'https://esm.sh/lucide-react@0.344.0';
 
         // --- API Configuration ---
         const apiKey = ""; 
@@ -141,7 +99,7 @@
 
         // --- Icon Mapping ---
         const ICON_MAP = {
-          ShoppingBag, Wallet, Car, Gamepad2, Coffee, Zap, Smartphone, Plane, Target, Repeat, Briefcase, Gift, Home, User, ArrowRightLeft
+          ShoppingBag, Wallet, Car, Gamepad2, Coffee, Zap, Smartphone, Plane, Target, Repeat, Briefcase, Gift, Home, User, ArrowRightLeft, Heart
         };
 
         // Helper to map category names to icon strings
@@ -422,10 +380,13 @@
           };
 
           return (
-            <div className="flex justify-between items-center p-6 pb-2 animate-fade-in relative z-50" style={{ color: isDarkMode ? 'white' : theme.navy }}>
+            <div 
+                className={`sticky top-0 z-50 flex justify-between items-center px-6 py-4 animate-fade-in transition-all duration-300 backdrop-blur-xl ${isDarkMode ? 'bg-gray-900/85 supports-[backdrop-filter]:bg-gray-900/60' : 'bg-gray-50/85 supports-[backdrop-filter]:bg-gray-50/60'}`} 
+                style={{ color: isDarkMode ? 'white' : theme.navy }}
+            >
                 <div className="flex-1 mr-4">
                 {isSearchOpen && activeTab === 'home' ? (
-                    <div className={`flex items-center rounded-xl px-3 py-2 transition-colors ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <div className={`flex items-center rounded-xl px-3 py-2 transition-colors ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-sm'}`}>
                     <Search size={18} className="mr-2 opacity-50" />
                     <input 
                         type="text" 
@@ -452,14 +413,14 @@
                                 setIsSearchOpen(!isSearchOpen);
                                 if (isSearchOpen) setSearchQuery(''); 
                             }}
-                            className={`p-2 rounded-full transition-all active:scale-95 ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} ${isSearchOpen ? 'bg-blue-100 text-blue-600' : ''}`}
+                            className={`p-2 rounded-full transition-all active:scale-95 ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-200 shadow-sm'} ${isSearchOpen ? 'bg-blue-100 text-blue-600' : ''}`}
                         >
                             {isSearchOpen ? <X size={20} /> : <Search size={20} color={isDarkMode ? 'white' : theme.navy} />}
                         </button>
                         
                         <button 
                             onClick={() => setIsDarkMode(!isDarkMode)}
-                            className={`p-2 rounded-full transition-all active:scale-95 ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}
+                            className={`p-2 rounded-full transition-all active:scale-95 ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-200 shadow-sm'}`}
                         >
                             {isDarkMode ? (
                             <Sun size={20} className="text-white" />
@@ -472,7 +433,7 @@
 
                 <button 
                     onClick={() => setIsNotifOpen(true)}
-                    className={`p-2 rounded-full relative transition-all active:scale-95 ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}
+                    className={`p-2 rounded-full relative transition-all active:scale-95 ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-200 shadow-sm'}`}
                 >
                     <Bell size={20} color={isDarkMode ? 'white' : theme.navy} />
                     {notifications.length > 0 && (
@@ -573,7 +534,7 @@
                 
                 <div className="mt-4">
                   <p className="opacity-80 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
-                      {wallet.name} {wallet.isDefault && <span className="bg-white/20 px-1.5 rounded text-[8px]">Default</span>}
+                     {wallet.name} {wallet.isDefault && <span className="bg-white/20 px-1.5 rounded text-[8px]">Default</span>}
                   </p>
                   <h3 className="text-2xl font-bold tracking-tight">${wallet.balance?.toLocaleString() || '0'}</h3>
                 </div>
@@ -735,10 +696,23 @@
           
           useEffect(() => setMounted(true), []);
 
+          // Define colorful vibrant gradients
+          const barGradients = [
+             `linear-gradient(to top, ${theme.royalBlue}, ${theme.skyBlue})`,
+             `linear-gradient(to top, ${theme.teal}, ${theme.aqua})`,
+             `linear-gradient(to top, ${theme.amber}, ${theme.yellow})`,
+             `linear-gradient(to top, ${theme.red}, ${theme.salmon})`,
+             `linear-gradient(to top, ${theme.hotPink}, ${theme.lightPink})`,
+             `linear-gradient(to top, ${theme.purple}, ${theme.lavender})`,
+             `linear-gradient(to top, ${theme.royalBlue}, ${theme.paleBlue})` 
+          ];
+
           return (
             <div className="flex items-end justify-between h-56 gap-2 pt-8 pb-2 px-2">
               {data.map((bar, i) => {
                 const heightPct = (bar.value / max) * 100;
+                // Cycle through vibrant gradients based on index
+                const currentGradient = barGradients[i % barGradients.length];
                 
                 return (
                   <div key={i} className="flex flex-col items-center flex-1 h-full justify-end group relative cursor-pointer">
@@ -759,7 +733,7 @@
                           className={`w-full rounded-full relative transition-all duration-1000 ease-[cubic-bezier(0.34,1.56,0.64,1)]`}
                           style={{ 
                             height: mounted ? `${Math.max(heightPct, 0)}%` : '0%', 
-                            background: `linear-gradient(to top, ${theme.royalBlue}, ${theme.skyBlue})`,
+                            background: currentGradient,
                             opacity: bar.value === 0 ? 0 : 1
                           }}
                         >
@@ -986,12 +960,12 @@
                   <div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Note</label><div className="flex gap-3"><div className={`flex-1 flex items-center px-5 py-3 rounded-2xl border transition-all ${isDarkMode ? 'border-gray-700 text-white' : 'border-gray-200 text-gray-800'}`}><FileText size={18} className="mr-3 opacity-40" /><input type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Write a note..." className="bg-transparent w-full font-medium outline-none" /></div><div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all active:scale-95 ${isDarkMode ? 'border-gray-700 text-gray-400 hover:text-white hover:border-gray-500' : 'border-gray-200 text-gray-400 hover:text-gray-600 hover:border-gray-200'}`}><ImageIcon size={22} /></div></div></div>
                   
                   <div className="flex gap-4 mt-2">
-                      {initialData && (
-                        <button type="button" onClick={() => { onDelete(initialData.id); onClose(); }} className="p-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
-                          <Trash2 size={24} />
-                        </button>
-                      )}
-                      <button type="submit" className="flex-1 py-4 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all" style={{ background: type === 'income' ? theme.teal : (type === 'transfer' ? theme.royalBlue : theme.hotPink) }}>{initialData ? 'Update' : 'Save'}</button>
+                     {initialData && (
+                       <button type="button" onClick={() => { onDelete(initialData.id); onClose(); }} className="p-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
+                         <Trash2 size={24} />
+                       </button>
+                     )}
+                     <button type="submit" className="flex-1 py-4 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all" style={{ background: type === 'income' ? theme.teal : (type === 'transfer' ? theme.royalBlue : theme.hotPink) }}>{initialData ? 'Update' : 'Save'}</button>
                   </div>
                 </form>
               </div>
@@ -1054,14 +1028,14 @@
                   <div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Due Date</label><div className={`flex items-center pb-2 border-b-2 transition-all ${isDarkMode ? 'border-gray-700 focus-within:border-white text-white' : 'border-gray-200 focus:border-gray-800 text-gray-800'}`}><Calendar size={20} className="mr-3 opacity-50" /><input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="bg-transparent w-full font-medium text-lg outline-none" /></div></div>
                   
                   <div className="flex gap-4 mt-2">
-                      {initialData && (
-                        <button type="button" onClick={() => { onDelete(initialData.id); onClose(); }} className="p-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
-                          <Trash2 size={24} />
-                        </button>
-                      )}
-                      <button type="submit" className="flex-1 py-4 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all" style={{ background: type === 'given' ? theme.teal : theme.hotPink }}>
-                        {initialData ? 'Update Loan' : 'Save Loan Record'}
-                      </button>
+                     {initialData && (
+                       <button type="button" onClick={() => { onDelete(initialData.id); onClose(); }} className="p-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
+                         <Trash2 size={24} />
+                       </button>
+                     )}
+                     <button type="submit" className="flex-1 py-4 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all" style={{ background: type === 'given' ? theme.teal : theme.hotPink }}>
+                       {initialData ? 'Update Loan' : 'Save Loan Record'}
+                     </button>
                   </div>
                 </form>
               </div>
@@ -1122,14 +1096,14 @@
                   <div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Next Payment</label><div className={`flex items-center pb-2 border-b-2 transition-all ${isDarkMode ? 'border-gray-700 focus-within:border-white text-white' : 'border-gray-200 focus:border-gray-800 text-gray-800'}`}><Calendar size={20} className="mr-3 opacity-50" /><input type="date" value={nextDate} onChange={(e) => setNextDate(e.target.value)} className="bg-transparent w-full font-medium text-lg outline-none" /></div></div>
                   
                   <div className="flex gap-4 mt-2">
-                      {initialData && (
-                        <button type="button" onClick={() => { onDelete(initialData.id); onClose(); }} className="p-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
-                          <Trash2 size={24} />
-                        </button>
-                      )}
-                      <button type="submit" className="flex-1 py-4 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all" style={{ background: theme.royalBlue }}>
-                        {initialData ? 'Update Sub' : 'Add Subscription'}
-                      </button>
+                     {initialData && (
+                       <button type="button" onClick={() => { onDelete(initialData.id); onClose(); }} className="p-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
+                         <Trash2 size={24} />
+                       </button>
+                     )}
+                     <button type="submit" className="flex-1 py-4 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all" style={{ background: theme.royalBlue }}>
+                       {initialData ? 'Update Sub' : 'Add Subscription'}
+                     </button>
                   </div>
                 </form>
               </div>
@@ -1227,15 +1201,15 @@
                   </div>
 
                   <div className="flex gap-4 mt-2">
-                      {initialData && (
-                        <button type="button" onClick={() => { onDelete(initialData.id); onClose(); }} className="p-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
-                          <Trash2 size={24} />
-                        </button>
-                      )}
-                      <button type="submit" className="flex-1 py-4 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all"
-                       style={{ background: theme.royalBlue }}>
-                       {initialData ? 'Update Goal' : 'Create Goal'}
-                      </button>
+                     {initialData && (
+                       <button type="button" onClick={() => { onDelete(initialData.id); onClose(); }} className="p-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
+                         <Trash2 size={24} />
+                       </button>
+                     )}
+                     <button type="submit" className="flex-1 py-4 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all"
+                      style={{ background: theme.royalBlue }}>
+                      {initialData ? 'Update Goal' : 'Create Goal'}
+                     </button>
                   </div>
                 </form>
               </div>
@@ -1396,7 +1370,7 @@
                     )}
 
                     <button type="submit" className="w-full py-4 mt-2 rounded-xl text-white font-bold text-lg shadow-md active:scale-[0.98] transition-all" style={{ background: theme.royalBlue }}>
-                        Save Wallet
+                       Save Wallet
                     </button>
                 </form>
               </div>
@@ -1586,12 +1560,12 @@
               
               // Handle source (if exists)
               if (calculated[t.account] !== undefined) {
-                  if (t.type === 'transfer') {
-                      calculated[t.account] -= amount;
-                  } else {
-                      // Regular income/expense (amount is signed)
-                      calculated[t.account] += t.amount;
-                  }
+                 if (t.type === 'transfer') {
+                     calculated[t.account] -= amount;
+                 } else {
+                     // Regular income/expense (amount is signed)
+                     calculated[t.account] += t.amount;
+                 }
               }
 
               // Handle destination (transfer)
@@ -1661,10 +1635,10 @@
             const endTime = end.setHours(23,59,59,999);
 
             if (txTime < startTime || txTime > endTime) {
-                  setCurrentDate(txDate);
-                  showToast(`Jumped to ${formatDisplayDate(data.date)}`);
+                 setCurrentDate(txDate);
+                 showToast(`Jumped to ${formatDisplayDate(data.date)}`);
             } else {
-                  showToast('Transaction saved!');
+                 showToast('Transaction saved!');
             }
           }, [currentDate, salaryDate, showToast]);
 
@@ -1804,26 +1778,33 @@
             }, {});
           }, [filteredTransactions]);
 
+          // --- FIXED CHART COLORS: Vibrant Palette for Donut ---
           const currentStatsData = useMemo(() => {
-            const expenseTx = dateFilteredTransactions.filter(t => t.type === 'expense'); // Only expenses for donut
+            const expenseTx = dateFilteredTransactions.filter(t => t.type === 'expense');
             const catSpending = expenseTx.reduce((acc, t) => {
                 const cat = t.category;
                 acc[cat] = (acc[cat] || 0) + Math.abs(t.amount);
                 return acc;
             }, {});
             
+            // Vibrant colors specifically chosen to be suitable and not dark
+            const vibrantPalette = [
+              theme.royalBlue, theme.skyBlue, theme.teal, theme.mint, 
+              theme.purple, theme.hotPink, theme.amber, theme.salmon
+            ];
+
             const data = Object.entries(catSpending).map(([label, value], index) => ({
                 label,
                 value,
-                color: Object.values(theme)[index % Object.values(theme).length]
+                color: vibrantPalette[index % vibrantPalette.length]
             }));
             
             data.sort((a, b) => b.value - a.value);
 
-            return data.length > 0 ? data : [{ label: 'No Data', value: 1, color: '#e5e7eb' }];
-          }, [dateFilteredTransactions]);
+            return data.length > 0 ? data : [{ label: 'No Data', value: 1, color: isDarkMode ? '#374151' : '#e5e7eb' }];
+          }, [dateFilteredTransactions, isDarkMode]);
           
-          // Last 7 Days Data Calculation for Bar Chart (Updated Logic)
+          // --- FIXED CHART COLORS: COLORFUL GRADIENTS for Bar Chart ---
           const last7DaysChartData = useMemo(() => {
             const data = [];
             const today = new Date();
@@ -1835,12 +1816,13 @@
               const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
               
               const dayTotal = transactions
-                .filter(t => t.date === isoDate && t.type === 'expense') // Only expenses
+                .filter(t => t.date === isoDate && t.type === 'expense') 
                 .reduce((sum, t) => sum + Math.abs(t.amount), 0);
                 
               data.push({
                 day: dayName,
                 value: dayTotal,
+                // Color property is effectively ignored by the BarChart component now in favor of gradients array
                 color: theme.royalBlue 
               });
             }
@@ -1892,7 +1874,6 @@
             const textColor = isDarkMode ? 'text-white' : '';
             const textStyle = isDarkMode ? {} : { color: theme.navy };
             
-            // Fix for the reduce bug: calculate total from values, not the object directly
             const totalAssets = Object.values(walletBalances).reduce((a, b) => a + b, 0);
 
             switch (activeTab) {
@@ -1937,7 +1918,6 @@
                             <h3 className={`text-3xl font-bold ${textColor}`} style={textStyle}>${totalAssets.toLocaleString()}</h3>
                         </div>
 
-                        {/* Wallet Cards List */}
                         <div className="flex flex-col gap-4 mb-6">
                             {wallets.map((wallet, idx) => (
                                 <WalletCard 
@@ -1949,7 +1929,6 @@
                             ))}
                         </div>
 
-                        {/* Add New Wallet Button - Moved to bottom */}
                         <button 
                             onClick={() => { setSelectedWallet(null); setIsWalletModalOpen(true); }}
                             className={`w-full py-4 rounded-2xl border-2 border-dashed flex items-center justify-center gap-2 transition-all ${isDarkMode ? 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-300' : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-600'}`}
@@ -1975,7 +1954,6 @@
                         <div className="flex justify-between items-center mb-6"><h3 className={`font-bold text-lg tracking-tight ${textColor}`} style={textStyle}>Active Loans</h3><span className="text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">{filteredLoans.length}</span></div>
                         <div className="flex flex-col gap-1">{filteredLoans.length > 0 ? (filteredLoans.map((loan, idx) => (<LoanItem key={loan.id} item={loan} index={idx} isDarkMode={isDarkMode} onClick={(item) => { setEditingLoan(item); setIsLoanModalOpen(true); }} />))) : (<p className="text-center text-gray-400 py-8 text-sm">No active loans found.</p>)}</div>
                       </div>
-                      {/* Add New Loan Button */}
                       <button 
                           onClick={() => { setEditingLoan(null); setIsLoanModalOpen(true); }}
                           className={`w-full py-4 mt-6 rounded-2xl border-2 border-dashed flex items-center justify-center gap-2 transition-all ${isDarkMode ? 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-300' : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-600'}`}
@@ -1989,7 +1967,6 @@
                     <div key="goals" className="px-6 pb-32 animate-page-enter mt-4">
                       <div className={`p-6 rounded-[2rem] shadow-lg mb-8 relative overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-[#052065]'}`}><div className="relative z-10 flex justify-between items-end"><div className="text-white"><span className="text-xs font-bold uppercase tracking-widest opacity-70 mb-1 block">Total Saved</span><h3 className="text-3xl font-bold">${totalGoalSaved.toLocaleString()}</h3><p className="text-xs opacity-60 mt-1">Target: ${totalGoalTarget.toLocaleString()}</p></div><div className="w-16 h-16 rounded-full border-4 border-teal-400 flex items-center justify-center text-white font-bold">{totalGoalTarget > 0 ? Math.round((totalGoalSaved / totalGoalTarget) * 100) : 0}%</div></div><div className="absolute -right-6 -bottom-10 opacity-10"><Trophy size={120} color="white" /></div></div>
                       <div><div className="flex justify-between items-center mb-4"><h3 className={`font-bold text-lg tracking-tight ${textColor}`} style={textStyle}>Your Targets</h3></div><div className="flex flex-col gap-1">{filteredGoals.length > 0 ? (filteredGoals.map((goal, idx) => (<GoalItem key={goal.id} item={goal} index={idx} isDarkMode={isDarkMode} onClick={(item) => { setEditingGoal(item); setIsAddGoalModalOpen(true); }} />))) : (<p className="text-center text-gray-400 py-8 text-sm">No goals set yet.</p>)}</div></div>
-                      {/* Add New Goal Button */}
                       <button 
                           onClick={() => { setEditingGoal(null); setIsAddGoalModalOpen(true); }}
                           className={`w-full py-4 mt-6 rounded-2xl border-2 border-dashed flex items-center justify-center gap-2 transition-all ${isDarkMode ? 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-300' : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-600'}`}
@@ -2004,7 +1981,6 @@
                       <div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm animate-slide-up-fade transition-colors duration-300`}>
                         <div className="flex justify-between items-center mb-6"><h3 className={`font-bold text-lg tracking-tight ${textColor}`} style={textStyle}>Active Subs</h3><span className="text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">{filteredSubs.length}</span></div><div className="flex flex-col gap-1">{filteredSubs.length > 0 ? (filteredSubs.map((sub, idx) => (<SubItem key={sub.id} item={sub} index={idx} isDarkMode={isDarkMode} onClick={(item) => { setEditingSub(item); setIsSubModalOpen(true); }} />))) : (<p className="text-center text-gray-400 py-8 text-sm">No subscriptions added.</p>)}</div>
                       </div>
-                      {/* Add New Sub Button */}
                       <button 
                           onClick={() => { setEditingSub(null); setIsSubModalOpen(true); }}
                           className={`w-full py-4 mt-6 rounded-2xl border-2 border-dashed flex items-center justify-center gap-2 transition-all ${isDarkMode ? 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-300' : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-600'}`}
@@ -2016,11 +1992,11 @@
                 );
                 case 'stats': return (
                     <div key="stats" className="pb-32 animate-page-enter mt-4"><div className="pt-2"><MonthSelector date={currentDate} salaryDate={salaryDate} onPrev={() => changeMonth(-1)} onNext={() => changeMonth(1)} isDarkMode={isDarkMode} /></div><div className="px-6"><div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm mb-6 animate-scale-in transition-colors duration-300`} style={{ animationDelay: '0.1s' }}><h3 className={`font-bold mb-4 ${textColor}`} style={textStyle}>Expense Breakdown</h3><DonutChart data={currentStatsData} isDarkMode={isDarkMode} />
-                      <div className="grid grid-cols-1 gap-y-3 mt-6"> 
-                        {currentStatsData.map((d, i) => (
-                          <div key={i} className="group relative overflow-hidden rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700/50 p-3 hover:border-gray-200 dark:hover:border-gray-600 transition-all cursor-pointer">
-                              <div className="absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-1000 ease-out" style={{ width: `${(d.value / currentStatsData.reduce((acc, curr) => acc + curr.value, 0)) * 100}%`, color: d.color }} />
-                              <div className="flex items-center justify-between relative z-10"><div className="flex items-center gap-3"><div className="w-8 h-8 rounded-full flex items-center justify-center bg-white dark:bg-gray-700 shadow-sm text-xs font-bold" style={{ color: d.color }}>{d.label.charAt(0)}</div><span className={`text-sm font-semibold tracking-tight ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{d.label}</span></div><div className="flex items-center gap-3"><span className={`text-sm font-bold tabular-nums ${textColor}`} style={textStyle}>{d.value === 1 && d.label === 'No Data' ? '-' : `$${d.value.toLocaleString()}`}</span><span className="text-[10px] font-bold px-2 py-1 rounded-md bg-white dark:bg-gray-700 shadow-sm text-gray-500 min-w-[45px] text-center">{d.value === 1 && d.label === 'No Data' ? '0%' : `${Math.round((d.value / currentStatsData.reduce((acc, curr) => acc + curr.value, 0)) * 100)}%`}</span></div></div></div>))}</div></div><div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm animate-scale-in transition-colors duration-300`} style={{ animationDelay: '0.2s' }}><h3 className={`font-bold mb-8 ${textColor}`} style={textStyle}>Weekly Spending</h3><BarChart data={last7DaysChartData} isDarkMode={isDarkMode} /></div></div></div>
+                          <div className="grid grid-cols-1 gap-y-3 mt-6"> 
+                            {currentStatsData.map((d, i) => (
+                              <div key={i} className="group relative overflow-hidden rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700/50 p-3 hover:border-gray-200 dark:hover:border-gray-600 transition-all cursor-pointer">
+                                  <div className="absolute bottom-0 left-0 h-1 bg-current opacity-20 transition-all duration-1000 ease-out" style={{ width: `${(d.value / currentStatsData.reduce((acc, curr) => acc + curr.value, 0)) * 100}%`, color: d.color }} />
+                                  <div className="flex items-center justify-between relative z-10"><div className="flex items-center gap-3"><div className="w-8 h-8 rounded-full flex items-center justify-center bg-white dark:bg-gray-700 shadow-sm text-xs font-bold" style={{ color: d.color }}>{d.label.charAt(0)}</div><span className={`text-sm font-semibold tracking-tight ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{d.label}</span></div><div className="flex items-center gap-3"><span className={`text-sm font-bold tabular-nums ${textColor}`} style={textStyle}>{d.value === 1 && d.label === 'No Data' ? '-' : `$${d.value.toLocaleString()}`}</span><span className="text-[10px] font-bold px-2 py-1 rounded-md bg-white dark:bg-gray-700 shadow-sm text-gray-500 min-w-[45px] text-center">{d.value === 1 && d.label === 'No Data' ? '0%' : `${Math.round((d.value / currentStatsData.reduce((acc, curr) => acc + curr.value, 0)) * 100)}%`}</span></div></div></div>))}</div></div><div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm animate-scale-in transition-colors duration-300`} style={{ animationDelay: '0.2s' }}><h3 className={`font-bold mb-8 ${textColor}`} style={textStyle}>Weekly Spending</h3><BarChart data={last7DaysChartData} isDarkMode={isDarkMode} /></div></div></div>
                 );
               case 'suggestions':
                 return (
@@ -2031,120 +2007,117 @@
                     {geminiData && (<div className="p-6 rounded-[2rem] shadow-lg mb-6 bg-gradient-to-br from-indigo-600 to-purple-700 text-white animate-scale-in relative overflow-hidden"><div className="relative z-10"><div className="flex items-center gap-2 mb-3"><div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm"><Sparkles size={16} className="text-yellow-300" /></div><span className="text-xs font-bold uppercase tracking-widest opacity-90">Gemini Advisor</span></div><h3 className="text-xl font-bold mb-2 leading-tight">{geminiData.analysis}</h3><div className="bg-black/20 rounded-xl p-4 mt-4 backdrop-blur-sm border border-white/10"><p className="text-sm font-medium mb-1 opacity-80 uppercase text-xs tracking-wider">Action Plan</p><p className="text-sm leading-relaxed">{geminiData.actionable_tip}</p></div><div className="mt-4 flex items-center gap-2"><span className="text-sm opacity-80">Potential Savings:</span><span className="text-xl font-bold text-green-300">${geminiData.potential_savings}</span></div></div><div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div><div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-500/30 rounded-full blur-2xl -ml-5 -mb-5"></div></div>)}
                     {!geminiData && (<div className={`p-6 rounded-[2rem] shadow-lg mb-6 relative overflow-hidden ${isDarkMode ? 'bg-gradient-to-br from-indigo-900 to-gray-900' : 'bg-gradient-to-br from-[#052065] to-[#0060E5]'}`}><div className="relative z-10 text-white"><div className="flex items-center gap-2 mb-2 opacity-80"><Target size={18} className="text-yellow-300" /><span className="text-xs font-bold uppercase tracking-widest">Monthly Goal</span></div><h3 className="text-2xl font-bold mb-1">Save ${Math.floor(insights.potentialSavings)} more</h3><p className="opacity-80 text-sm mb-6">Based on your current spending patterns.</p><div className="flex gap-4"><div className="flex-1 bg-white/10 rounded-xl p-3 backdrop-blur-sm"><span className="text-[10px] font-bold uppercase opacity-70 block mb-1">Current</span><span className="text-lg font-bold">${totalBalance.toLocaleString()}</span></div><div className="flex-1 bg-white/20 rounded-xl p-3 backdrop-blur-sm border border-white/20"><span className="text-[10px] font-bold uppercase opacity-70 block mb-1 text-green-200">Potential</span><span className="text-lg font-bold text-green-300">${insights.projectedBalance.toLocaleString(undefined, {maximumFractionDigits: 0})}</span></div></div></div><div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div></div>)}
                     <div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm mb-6 animate-slide-up-fade transition-colors duration-300`} style={{ animationDelay: '0.1s' }}><div className="flex items-start gap-4"><div className={`p-3 rounded-2xl ${isDarkMode ? 'bg-red-500/20 text-red-400' : 'bg-red-50 text-red-500'}`}><TrendingDown size={24} /></div><div><h4 className={`font-bold text-lg mb-1 ${textColor}`} style={textStyle}>High Spending Alert</h4><p className="text-sm text-gray-500 leading-relaxed mb-3">You've spent <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>${insights.maxVal}</span> on <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{insights.maxCat}</span> this month.
-                      </p>
-                      <div className={`p-3 rounded-xl border border-dashed ${isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'}`}>
-                        <p className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                          💡 <strong>Tip:</strong> Reducing this by just 15% could save you <strong>${Math.floor(insights.potentialSavings)}</strong>/mo.
-                        </p>
+                          </p>
+                          <div className={`p-3 rounded-xl border border-dashed ${isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'}`}>
+                            <p className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                              💡 <strong>Tip:</strong> Reducing this by just 15% could save you <strong>${Math.floor(insights.potentialSavings)}</strong>/mo.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm animate-slide-up-fade transition-colors duration-300`} style={{ animationDelay: '0.2s' }}><div className="flex items-center gap-3 mb-4"><div className={`p-2 rounded-xl ${isDarkMode ? 'bg-green-500/20 text-green-400' : 'bg-green-50 text-green-600'}`}><Target size={20} /></div><h4 className={`font-bold ${textColor}`} style={textStyle}>Budget Health</h4></div><div className="space-y-4"><div><div className="flex justify-between text-xs font-bold mb-2 opacity-70"><span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>Necessities (50%)</span><span className={isDarkMode ? 'text-white' : 'text-gray-900'}>$1,240 / $2,000</span></div><div className={`h-2 w-full rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}><div className="h-full bg-blue-500 rounded-full" style={{ width: '62%' }}></div></div></div><div><div className="flex justify-between text-xs font-bold mb-2 opacity-70"><span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>Wants (30%)</span><span className={isDarkMode ? 'text-white' : 'text-gray-900'}>$850 / $1,200</span></div><div className={`h-2 w-full rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}><div className="h-full bg-purple-500 rounded-full" style={{ width: '70%' }}></div></div></div><div><div className="flex justify-between text-xs font-bold mb-2 opacity-70"><span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>Savings (20%)</span><span className={isDarkMode ? 'text-white' : 'text-gray-900'}>$300 / $800</span></div><div className={`h-2 w-full rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}><div className="h-full bg-teal-500 rounded-full" style={{ width: '37%' }}></div></div></div></div></div>
+                  </div>
+                );
+              case 'profile':
+                return (
+                  <div key="profile" className="px-6 pb-32 animate-page-enter mt-6">
+                    <div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm mb-6 animate-slide-up-fade transition-colors duration-300`}>
+                      <div className={`flex items-center justify-between mb-8 pb-8 border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-100'}`}>
+                        <div className="flex items-center gap-4"><div className={`p-3 rounded-xl ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>{isDarkMode ? <Moon size={20} className="text-gray-300" /> : <Sun size={20} className="text-indigo-600" />}</div><div><h3 className={`font-bold ${textColor}`} style={textStyle}>Dark Mode</h3><p className="text-xs text-gray-400 mt-1">Adjust screen brightness</p></div></div>
+                        <button onClick={() => setIsDarkMode(!isDarkMode)} className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 flex items-center ${isDarkMode ? 'bg-gray-700 justify-end' : 'bg-gray-200 justify-start'}`}><div className="w-5 h-5 rounded-full bg-white shadow-sm" /></button>
+                      </div>
+                      <div className="flex items-center justify-between mb-6"><div><h3 className={`font-bold ${textColor}`} style={textStyle}>Cycle Start Date</h3><p className="text-sm text-gray-400 mt-1 font-medium">When does your month start?</p></div><div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}><span className="text-lg font-bold" style={{ color: theme.royalBlue }}>{salaryDate}</span></div></div>
+                      <div className="mt-4"><input type="range" min="1" max="31" value={salaryDate} onChange={(e) => setSalaryDate(parseInt(e.target.value))} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" style={{ accentColor: theme.royalBlue }} /><div className="flex justify-between text-xs text-gray-400 mt-3 font-bold uppercase tracking-wider"><span>1st</span><span>15th</span><span>31st</span></div></div>
+                      
+                      {/* Divider */}
+                      <div className={`my-8 border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-100'}`}></div>
+
+                      <h3 className={`font-bold mb-4 ${textColor}`} style={textStyle}>Data Management</h3>
+                      
+                      {/* Add Month Selector */}
+                      <div className="mb-4">
+                          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Select Month to Reset</label>
+                          <div className={`flex items-center px-4 py-3 rounded-xl border transition-all ${isDarkMode ? 'border-gray-700 bg-gray-800 text-white' : 'border-gray-200 bg-white text-gray-800'}`}>
+                            <Calendar size={20} className="mr-3 opacity-50" />
+                            <input 
+                              type="month" 
+                              value={resetTargetMonth} 
+                              onChange={(e) => setResetTargetMonth(e.target.value)}
+                              className={`bg-transparent w-full font-bold outline-none ${isDarkMode ? 'text-white' : 'text-gray-900'}`} 
+                            />
+                          </div>
+                      </div>
+
+                      <div className="flex flex-col gap-3">
+                        <button 
+                          onClick={handleResetSpecificMonth}
+                          className="w-full py-3 rounded-xl border-2 border-red-100 text-red-500 font-bold text-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center justify-center gap-2"
+                        >
+                          <Trash2 size={18} /> Delete Data for {resetTargetMonth}
+                        </button>
+                        <button 
+                          onClick={handleResetAll}
+                          className="w-full py-3 rounded-xl bg-red-500 text-white font-bold text-sm hover:bg-red-600 transition-colors flex items-center justify-center gap-2 shadow-md shadow-red-200"
+                        >
+                          <Trash2 size={18} /> Reset All Data
+                        </button>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm animate-slide-up-fade transition-colors duration-300`} style={{ animationDelay: '0.2s' }}><div className="flex items-center gap-3 mb-4"><div className={`p-2 rounded-xl ${isDarkMode ? 'bg-green-500/20 text-green-400' : 'bg-green-50 text-green-600'}`}><Target size={20} /></div><h4 className={`font-bold ${textColor}`} style={textStyle}>Budget Health</h4></div><div className="space-y-4"><div><div className="flex justify-between text-xs font-bold mb-2 opacity-70"><span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>Necessities (50%)</span><span className={isDarkMode ? 'text-white' : 'text-gray-900'}>$1,240 / $2,000</span></div><div className={`h-2 w-full rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}><div className="h-full bg-blue-500 rounded-full" style={{ width: '62%' }}></div></div></div><div><div className="flex justify-between text-xs font-bold mb-2 opacity-70"><span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>Wants (30%)</span><span className={isDarkMode ? 'text-white' : 'text-gray-900'}>$850 / $1,200</span></div><div className={`h-2 w-full rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}><div className="h-full bg-purple-500 rounded-full" style={{ width: '70%' }}></div></div></div><div><div className="flex justify-between text-xs font-bold mb-2 opacity-70"><span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>Savings (20%)</span><span className={isDarkMode ? 'text-white' : 'text-gray-900'}>$300 / $800</span></div><div className={`h-2 w-full rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}><div className="h-full bg-teal-500 rounded-full" style={{ width: '37%' }}></div></div></div></div></div>
-              </div>
-            );
-          case 'profile':
-            return (
-              <div key="profile" className="px-6 pb-32 animate-page-enter mt-6">
-                <div className={`${cardBgClass} p-6 rounded-[2rem] shadow-sm mb-6 animate-slide-up-fade transition-colors duration-300`}>
-                  <div className={`flex items-center justify-between mb-8 pb-8 border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-100'}`}>
-                    <div className="flex items-center gap-4"><div className={`p-3 rounded-xl ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>{isDarkMode ? <Moon size={20} className="text-gray-300" /> : <Sun size={20} className="text-indigo-600" />}</div><div><h3 className={`font-bold ${textColor}`} style={textStyle}>Dark Mode</h3><p className="text-xs text-gray-400 mt-1">Adjust screen brightness</p></div></div>
-                    <button onClick={() => setIsDarkMode(!isDarkMode)} className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 flex items-center ${isDarkMode ? 'bg-gray-700 justify-end' : 'bg-gray-200 justify-start'}`}><div className="w-5 h-5 rounded-full bg-white shadow-sm" /></button>
+                );
+              default:
+                return (
+                  <div key="other" className="flex flex-col items-center justify-center h-[60vh] text-gray-400 px-10 text-center animate-page-enter">
+                    <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}><Settings size={32} className="opacity-50" /></div>
+                    <p className="font-medium text-sm">This section is under development.</p>
                   </div>
-                  <div className="flex items-center justify-between mb-6"><div><h3 className={`font-bold ${textColor}`} style={textStyle}>Cycle Start Date</h3><p className="text-sm text-gray-400 mt-1 font-medium">When does your month start?</p></div><div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}><span className="text-lg font-bold" style={{ color: theme.royalBlue }}>{salaryDate}</span></div></div>
-                  <div className="mt-4"><input type="range" min="1" max="31" value={salaryDate} onChange={(e) => setSalaryDate(parseInt(e.target.value))} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" style={{ accentColor: theme.royalBlue }} /><div className="flex justify-between text-xs text-gray-400 mt-3 font-bold uppercase tracking-wider"><span>1st</span><span>15th</span><span>31st</span></div></div>
-                  
-                  {/* Divider */}
-                  <div className={`my-8 border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-100'}`}></div>
+                );
+            }
+          };
 
-                  <h3 className={`font-bold mb-4 ${textColor}`} style={textStyle}>Data Management</h3>
-                  
-                  {/* Add Month Selector */}
-                  <div className="mb-4">
-                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Select Month to Reset</label>
-                      <div className={`flex items-center px-4 py-3 rounded-xl border transition-all ${isDarkMode ? 'border-gray-700 bg-gray-800 text-white' : 'border-gray-200 bg-white text-gray-800'}`}>
-                        <Calendar size={20} className="mr-3 opacity-50" />
-                        <input 
-                          type="month" 
-                          value={resetTargetMonth} 
-                          onChange={(e) => setResetTargetMonth(e.target.value)}
-                          className={`bg-transparent w-full font-bold outline-none ${isDarkMode ? 'text-white' : 'text-gray-900'}`} 
-                        />
-                      </div>
-                  </div>
+          const mainBgClass = isDarkMode ? 'bg-gray-900' : 'bg-gray-50';
 
-                  <div className="flex flex-col gap-3">
-                    <button 
-                      onClick={handleResetSpecificMonth}
-                      className="w-full py-3 rounded-xl border-2 border-red-100 text-red-500 font-bold text-sm hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center justify-center gap-2"
-                    >
-                      <Trash2 size={18} /> Delete Data for {resetTargetMonth}
-                    </button>
-                    <button 
-                      onClick={handleResetAll}
-                      className="w-full py-3 rounded-xl bg-red-500 text-white font-bold text-sm hover:bg-red-600 transition-colors flex items-center justify-center gap-2 shadow-md shadow-red-200"
-                    >
-                      <Trash2 size={18} /> Reset All Data
-                    </button>
-                  </div>
-                </div>
+          return (
+            <div className={`h-screen font-sans relative max-w-md mx-auto shadow-2xl overflow-hidden transition-colors duration-300 ${mainBgClass} flex flex-col`}>
+              {showWelcome && <WelcomeModal onSave={handleNameSave} isDarkMode={isDarkMode} />}
+              <div className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative z-10" style={{ WebkitOverflowScrolling: 'touch' }}>
+                  <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} searchQuery={searchQuery} setSearchQuery={setSearchQuery} notifications={notifications} isNotifOpen={isNotifOpen} setIsNotifOpen={setIsNotifOpen} activeTab={activeTab} userName={userName} />
+                  {renderContent()}
               </div>
-            );
-          default:
-            return (
-              <div key="other" className="flex flex-col items-center justify-center h-[60vh] text-gray-400 px-10 text-center animate-page-enter">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}><Settings size={32} className="opacity-50" /></div>
-                <p className="font-medium text-sm">This section is under development.</p>
-              </div>
-            );
+              {activeTab === 'home' && (
+                <button onClick={() => { if (activeTab === 'loans') { setEditingLoan(null); setIsLoanModalOpen(true); } else if (activeTab === 'goals') { setEditingGoal(null); setIsAddGoalModalOpen(true); } else if (activeTab === 'subs') { setEditingSub(null); setIsSubModalOpen(true); } else { setEditingTransaction(null); setIsTransactionModalOpen(true); } }} className="fixed bottom-24 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-105 active:scale-95 z-50 animate-bounce-in group" style={{ background: theme.hotPink }}><Plus size={28} className="group-hover:rotate-90 transition-transform duration-300" /></button>
+              )}
+              
+              {/* Global Components */}
+              <Toast message={toastConfig.message} type={toastConfig.type} onClose={closeToast} />
+              <ConfirmationModal {...confirmModalConfig} onClose={() => setConfirmModalConfig({ ...confirmModalConfig, isOpen: false })} isDarkMode={isDarkMode} />
+              
+              {/* Modals */}
+              <TransactionModal 
+                isOpen={isTransactionModalOpen} 
+                onClose={() => setIsTransactionModalOpen(false)} 
+                onSave={handleSaveTransaction} 
+                onDelete={handleDeleteTransaction} 
+                initialData={editingTransaction} 
+                isDarkMode={isDarkMode} 
+                showToast={showToast} 
+                wallets={wallets} 
+                onManageWallets={handleManageWallets}
+              />
+              <LoanModal isOpen={isLoanModalOpen} onClose={() => setIsLoanModalOpen(false)} onSave={handleSaveLoan} onDelete={handleDeleteLoan} initialData={editingLoan} isDarkMode={isDarkMode} showToast={showToast} />
+              <SubscriptionModal isOpen={isSubModalOpen} onClose={() => setIsSubModalOpen(false)} onSave={handleSaveSub} onDelete={handleDeleteSub} initialData={editingSub} isDarkMode={isDarkMode} showToast={showToast} />
+              <AddGoalModal isOpen={isAddGoalModalOpen} onClose={() => setIsAddGoalModalOpen(false)} onSave={handleSaveGoal} onDelete={handleDeleteGoal} initialData={editingGoal} isDarkMode={isDarkMode} showToast={showToast} />
+              <WalletDetailsModal isOpen={isWalletModalOpen} onClose={() => setIsWalletModalOpen(false)} onSave={handleSaveWallet} wallet={selectedWallet} isDarkMode={isDarkMode} showToast={showToast} isNew={!selectedWallet} />
+              
+              <div className={`fixed bottom-0 w-full max-w-md border-t px-6 py-4 pb-8 flex justify-between items-center z-40 transition-colors duration-300 ${isDarkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'}`}>{['home', 'stats', 'wallet', 'suggestions', 'profile'].map((tab) => { const isActive = activeTab === tab; const Icons = { home: Home, stats: PieChart, wallet: Wallet, suggestions: Sparkles, profile: Settings }; const Icon = Icons[tab]; return (<button key={tab} onClick={() => setActiveTab(tab)} className={`flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'scale-110' : 'text-gray-400 hover:text-gray-500 scale-100'}`} style={{ color: isActive ? theme.royalBlue : isDarkMode ? '#6b7280' : undefined }}><Icon size={24} strokeWidth={isActive ? 2.5 : 2} />{isActive && (<span className="w-1 h-1 rounded-full bg-current animate-fade-in mt-1"></span>)}</button>); })}</div>
+              <style>{` .custom-scrollbar::-webkit-scrollbar { width: 0px; background: transparent; } :root { --ease-ios: cubic-bezier(0.16, 1, 0.3, 1); } @keyframes pageEnter { from { opacity: 0; transform: scale(0.99) translateY(5px); } to { opacity: 1; transform: scale(1) translateY(0); } } @keyframes slideUpFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } @keyframes staggerIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } } @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } } @keyframes bounceIn { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } } @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } } .animate-fade-in { animation: fade-in 0.3s ease-out forwards; } .animate-page-enter { animation: pageEnter 0.4s var(--ease-ios) forwards; } .animate-slide-up-fade { animation: slideUpFade 0.5s var(--ease-ios) backwards; } .animate-stagger-in { animation: staggerIn 0.3s var(--ease-ios) forwards; } .animate-scale-in { animation: scaleIn 0.4s var(--ease-ios) backwards; } .animate-bounce-in { animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; } `}</style>
+            </div>
+          );
         }
-      };
-
-      const mainBgClass = isDarkMode ? 'bg-gray-900' : 'bg-gray-50';
-
-      return (
-        <div className={`h-screen font-sans relative max-w-md mx-auto shadow-2xl overflow-hidden transition-colors duration-300 ${mainBgClass} flex flex-col`}>
-          {showWelcome && <WelcomeModal onSave={handleNameSave} isDarkMode={isDarkMode} />}
-          <div className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth relative z-10" style={{ WebkitOverflowScrolling: 'touch' }}>
-              <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} searchQuery={searchQuery} setSearchQuery={setSearchQuery} notifications={notifications} isNotifOpen={isNotifOpen} setIsNotifOpen={setIsNotifOpen} activeTab={activeTab} userName={userName} />
-              {renderContent()}
-          </div>
-          {activeTab === 'home' && (
-            <button onClick={() => { if (activeTab === 'loans') { setEditingLoan(null); setIsLoanModalOpen(true); } else if (activeTab === 'goals') { setEditingGoal(null); setIsAddGoalModalOpen(true); } else if (activeTab === 'subs') { setEditingSub(null); setIsSubModalOpen(true); } else { setEditingTransaction(null); setIsTransactionModalOpen(true); } }} className="fixed bottom-24 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-105 active:scale-95 z-50 animate-bounce-in group" style={{ background: theme.hotPink }}><Plus size={28} className="group-hover:rotate-90 transition-transform duration-300" /></button>
-          )}
-          
-          {/* Global Components */}
-          <Toast message={toastConfig.message} type={toastConfig.type} onClose={closeToast} />
-          <ConfirmationModal {...confirmModalConfig} onClose={() => setConfirmModalConfig({ ...confirmModalConfig, isOpen: false })} isDarkMode={isDarkMode} />
-          
-          {/* Modals */}
-          <TransactionModal 
-            isOpen={isTransactionModalOpen} 
-            onClose={() => setIsTransactionModalOpen(false)} 
-            onSave={handleSaveTransaction} 
-            onDelete={handleDeleteTransaction} 
-            initialData={editingTransaction} 
-            isDarkMode={isDarkMode} 
-            showToast={showToast} 
-            wallets={wallets} 
-            onManageWallets={handleManageWallets}
-          />
-          <LoanModal isOpen={isLoanModalOpen} onClose={() => setIsLoanModalOpen(false)} onSave={handleSaveLoan} onDelete={handleDeleteLoan} initialData={editingLoan} isDarkMode={isDarkMode} showToast={showToast} />
-          <SubscriptionModal isOpen={isSubModalOpen} onClose={() => setIsSubModalOpen(false)} onSave={handleSaveSub} onDelete={handleDeleteSub} initialData={editingSub} isDarkMode={isDarkMode} showToast={showToast} />
-          <AddGoalModal isOpen={isAddGoalModalOpen} onClose={() => setIsAddGoalModalOpen(false)} onSave={handleSaveGoal} onDelete={handleDeleteGoal} initialData={editingGoal} isDarkMode={isDarkMode} showToast={showToast} />
-          <WalletDetailsModal isOpen={isWalletModalOpen} onClose={() => setIsWalletModalOpen(false)} onSave={handleSaveWallet} wallet={selectedWallet} isDarkMode={isDarkMode} showToast={showToast} isNew={!selectedWallet} />
-          
-          <div className={`fixed bottom-0 w-full max-w-md border-t px-6 py-4 pb-8 flex justify-between items-center z-40 transition-colors duration-300 ${isDarkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'}`}>{['home', 'stats', 'wallet', 'suggestions', 'profile'].map((tab) => { const isActive = activeTab === tab; const Icons = { home: Home, stats: PieChart, wallet: Wallet, suggestions: Sparkles, profile: Settings }; const Icon = Icons[tab]; return (<button key={tab} onClick={() => setActiveTab(tab)} className={`flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'scale-110' : 'text-gray-400 hover:text-gray-500 scale-100'}`} style={{ color: isActive ? theme.royalBlue : isDarkMode ? '#6b7280' : undefined }}><Icon size={24} strokeWidth={isActive ? 2.5 : 2} />{isActive && (<span className="w-1 h-1 rounded-full bg-current animate-fade-in mt-1"></span>)}</button>); })}</div>
-          
-        </div>
-      );
-    }
-        // --- YOUR CODE ENDS HERE ---
-
-        // Render the component to the DOM
-        const container = document.getElementById('root');
-        const root = createRoot(container);
+        
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
