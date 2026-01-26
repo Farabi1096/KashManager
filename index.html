@@ -381,7 +381,8 @@
 
           return (
             <div 
-                className={`sticky top-0 z-50 flex justify-between items-center px-6 py-4 animate-fade-in transition-all duration-300 backdrop-blur-xl ${isDarkMode ? 'bg-gray-900/85 supports-[backdrop-filter]:bg-gray-900/60' : 'bg-gray-50/85 supports-[backdrop-filter]:bg-gray-50/60'}`} 
+                // Increased top padding (pt-12) for mobile safe area, normalized (md:py-6) for desktop
+                className={`sticky top-0 z-50 flex justify-between items-center px-6 pt-12 pb-4 md:py-6 animate-fade-in transition-all duration-300 backdrop-blur-xl ${isDarkMode ? 'bg-gray-900/85 supports-[backdrop-filter]:bg-gray-900/60' : 'bg-gray-50/85 supports-[backdrop-filter]:bg-gray-50/60'}`} 
                 style={{ color: isDarkMode ? 'white' : theme.navy }}
             >
                 <div className="flex-1 mr-4">
